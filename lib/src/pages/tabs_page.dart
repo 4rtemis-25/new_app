@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/src/pages/tab1_page.dart';
+import 'package:new_app/src/services/news_service.dart';
 import 'package:provider/provider.dart';
 
 class TabsPage extends StatelessWidget {
@@ -40,14 +42,13 @@ class _Pages extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final navegacionModel = Provider.of<_NavegacionModel>(context);
+    final newService = Provider.of<NewsService>(context);
 
     return PageView(
       controller: navegacionModel.pageController,
       physics: const NeverScrollableScrollPhysics(),
       children: <Widget>[
-        Container(
-          color: Colors.red,
-        ),
+        Tab1Page(),
 
         Container(
           color: Colors.green,
