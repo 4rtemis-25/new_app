@@ -1,70 +1,72 @@
 import 'dart:convert';
 
 class NewsResponse {
-    String status;
-    int totalResults;
-    List<Article> articles;
+  String status;
+  int totalResults;
+  List<Article> articles;
 
-    NewsResponse({
-        required this.status,
-        required this.totalResults,
-        required this.articles,
-    });
+  NewsResponse({
+    required this.status,
+    required this.totalResults,
+    required this.articles,
+  });
 
-    factory NewsResponse.fromRawJson(String str) => NewsResponse.fromJson(json.decode(str));
+  factory NewsResponse.fromRawJson(String str) =>
+      NewsResponse.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory NewsResponse.fromJson(Map<String, dynamic> json) => NewsResponse(
+  factory NewsResponse.fromJson(Map<String, dynamic> json) => NewsResponse(
         status: json["status"],
         totalResults: json["totalResults"],
-        articles: List<Article>.from(json["articles"].map((x) => Article.fromJson(x))),
-    );
+        articles: List<Article>.from(
+            json["articles"].map((x) => Article.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "status": status,
         "totalResults": totalResults,
         "articles": List<dynamic>.from(articles.map((x) => x.toJson())),
-    };
+      };
 }
 
 class Article {
-    Source source;
-    String author;
-    String title;
-    dynamic description;
-    String url;
-    dynamic urlToImage;
-    DateTime publishedAt;
-    dynamic content;
+  Source source;
+  String author;
+  String title;
+  dynamic description;
+  String url;
+  dynamic urlToImage;
+  DateTime publishedAt;
+  dynamic content;
 
-    Article({
-        required this.source,
-        required this.author,
-        required this.title,
-        required this.description,
-        required this.url,
-        required this.urlToImage,
-        required this.publishedAt,
-        required this.content,
-    });
+  Article({
+    required this.source,
+    required this.author,
+    required this.title,
+    required this.description,
+    required this.url,
+    required this.urlToImage,
+    required this.publishedAt,
+    required this.content,
+  });
 
-    factory Article.fromRawJson(String str) => Article.fromJson(json.decode(str));
+  factory Article.fromRawJson(String str) => Article.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory Article.fromJson(Map<String, dynamic> json) => Article(
+  factory Article.fromJson(Map<String, dynamic> json) => Article(
         source: Source.fromJson(json["source"]),
-        author: json["author"],
+        author: json["author"] ?? "No Author",
         title: json["title"],
         description: json["description"],
         url: json["url"],
         urlToImage: json["urlToImage"],
         publishedAt: DateTime.parse(json["publishedAt"]),
         content: json["content"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "source": source.toJson(),
         "author": author,
         "title": title,
@@ -73,57 +75,51 @@ class Article {
         "urlToImage": urlToImage,
         "publishedAt": publishedAt.toIso8601String(),
         "content": content,
-    };
+      };
 }
 
 class Source {
-    Id id;
-    Name name;
+  Id id;
+  Name name;
 
-    Source({
-        required this.id,
-        required this.name,
-    });
+  Source({
+    required this.id,
+    required this.name,
+  });
 
-    factory Source.fromRawJson(String str) => Source.fromJson(json.decode(str));
+  factory Source.fromRawJson(String str) => Source.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory Source.fromJson(Map<String, dynamic> json) => Source(
-        id: idValues.map[json["id"]]!,
-        name: nameValues.map[json["name"]]!,
-    );
+  factory Source.fromJson(Map<String, dynamic> json) => Source(
+        id: idValues.map[json["id"]] ??
+            Id.GOOGLE_NEWS, // usa un valor predeterminado si json["id"] es null
+        name: nameValues.map[json["name"]] ??
+            Name.GOOGLE_NEWS, // usa un valor predeterminado si json["name"] es null
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": idValues.reverse[id],
         "name": nameValues.reverse[name],
-    };
+      };
 }
 
-enum Id {
-    GOOGLE_NEWS
-}
+enum Id { GOOGLE_NEWS }
 
-final idValues = EnumValues({
-    "google-news": Id.GOOGLE_NEWS
-});
+final idValues = EnumValues({"google-news": Id.GOOGLE_NEWS});
 
-enum Name {
-    GOOGLE_NEWS
-}
+enum Name { GOOGLE_NEWS }
 
-final nameValues = EnumValues({
-    "Google News": Name.GOOGLE_NEWS
-});
+final nameValues = EnumValues({"Google News": Name.GOOGLE_NEWS});
 
 class EnumValues<T> {
-    Map<String, T> map;
-    late Map<T, String> reverseMap;
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
 
-    EnumValues(this.map);
+  EnumValues(this.map);
 
-    Map<T, String> get reverse {
-        reverseMap = map.map((k, v) => MapEntry(v, k));
-        return reverseMap;
-    }
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }
